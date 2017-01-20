@@ -41,8 +41,7 @@
 package javax.ws.rs.client;
 
 import java.util.Locale;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Future;
+import java.util.concurrent.*;
 
 import javax.ws.rs.ProcessingException;
 import javax.ws.rs.WebApplicationException;
@@ -324,6 +323,15 @@ public interface Invocation {
          */
         public <T extends RxInvoker> T rx(RxInvokerProvider<T> rxInvokerProvider);
 
+        /**
+         * Access a registered reactive invoker based on the return type of the invoker's methods. 
+         * This method is an extension point for JAX-RS implementations to support other types
+         * representing asynchronous computations.
+         *
+         * @param type {@link GenericType} type that defines the return type of reactive operations (e.g. {@code new GenericType<CompletionStage<String>>} defines {@code CompletionStage<String>} return type.
+         * @return reactive invoker instance.
+         */
+        public <T> RxInvoker<T> rx(GenericType<T> type);
         /**
          * Access a reactive invoker based on an implementation of {@link RxInvokerProvider}
          * provided. This method is an extension point for JAX-RS implementations to support other types

@@ -44,10 +44,7 @@ import java.util.List;
 import java.util.concurrent.CompletionStage;
 import java.util.concurrent.ExecutorService;
 
-import javax.ws.rs.client.Client;
-import javax.ws.rs.client.CompletionStageRxInvoker;
-import javax.ws.rs.client.Invocation;
-import javax.ws.rs.client.RxInvokerProvider;
+import javax.ws.rs.client.*;
 
 import org.junit.Ignore;
 import org.junit.Test;
@@ -95,6 +92,25 @@ public class RxClientTest {
                         .rx(new CompletionStageRxInvokerProvider())
                         .get(new GenericType<List<String>>() {
                         });
+
+        cs.thenAccept(System.out::println);
+    }
+
+    /**
+     * Shows how other reactive invokers could be plugged in using a GenericType with target return type
+     * as an argument.
+     */
+    @Test
+    @Ignore
+    public void testRxClientGenericType() {
+        CompletionStage<List<String>> cs =
+        client.target("remote/forecast/{destination}")
+                .resolveTemplate("destination", "mars")
+                .request()
+                .header("Rx-User", "Java8")
+                .rx(new GenericType<CompletionStage>() {})
+                .get(new GenericType<List<String>>() {
+                });
 
         cs.thenAccept(System.out::println);
     }
