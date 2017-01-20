@@ -108,7 +108,7 @@ public class RxClientTest {
                 .resolveTemplate("destination", "mars")
                 .request()
                 .header("Rx-User", "Java8")
-                .rx(new GenericType<CompletionStage<List<String>>>() {})
+                .rx(new GenericType<CompletionStage<List<String>>>())
                 .get();
 
         cs.thenAccept(System.out::println);
